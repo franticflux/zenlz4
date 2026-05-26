@@ -10,16 +10,14 @@ It converts between:
 
 ## What it does
 
-zenlz4 handles:
+zenlz4 supports:
 
-[ "mozLz40" header ][ original size (4 bytes) ][ LZ4 compressed JSON ]
-
-It supports:
 - decode: .jsonlz4 → JSON
 - encode: JSON → .jsonlz4
 
-Example of usage:
+Example of seamless integration in Neovim (make sure you have zenlz4 on the path):
 
+´´´ lua
 vim.api.nvim_create_autocmd("BufReadCmd", {
   pattern = { "*.jsonlz4" },
   callback = function()
@@ -77,5 +75,4 @@ vim.api.nvim_create_autocmd("BufWriteCmd", {
     vim.bo.modified = false
   end,
 })
-
-
+´´´
