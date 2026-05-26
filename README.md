@@ -5,7 +5,7 @@
 **A lightweight CLI tool for encoding and decoding Mozilla-style `.jsonlz4` files**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![C++](https://img.shields.io/badge/C++-17-blue.svg)](https://isocpp.org/)
+[![C++](https://img.shields.io/badge/C++-23-blue.svg)](https://isocpp.org/)
 
 </div>
 
@@ -44,7 +44,7 @@ vcpkg install lz4:x64-windows-static
 cmake --build build
 ```
 
-> **Note:** Update the vcpkg toolchain path at the bottom of `init.bat` to match your local installation.
+> **Note:** Update the vcpkg toolchain path (the -DCMAKE_TOOLCHAIN_FILE=) near the bottom of `init.bat` to match your local installation.
 
 ---
 
