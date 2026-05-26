@@ -1,13 +1,8 @@
 #include <string>
-#include <stdlib.h>
 #include <lz4.h>
-#include <lz4frame.h>
 #include <fstream>
 #include <vector>
 #include <print>
-#include <fcntl.h>
-#include <io.h>
-#include <iostream>
 #include <optional>
 
 static void die (std::string msg) {
@@ -41,12 +36,8 @@ int writefile (const std::string& path, std::vector<char>& mem,  const std::opti
 }
 
 int main (int argc, char** argv) {
-    _setmode (_fileno (stdout), _O_BINARY);
 
-    std::ios::sync_with_stdio (false);
-    std::cin.tie (nullptr);
-
-    if (argc != 4) die ("usage: d|e infile outfile");
+    if (argc != 4) die ("Too few arguments, usage: d|e infile outfile");
     if (argv[1][0] == 'd') {
         std::vector readbuf = readfile (argv[2]);
         int expected_size = *reinterpret_cast<int*> (&readbuf[8]);
@@ -71,5 +62,5 @@ int main (int argc, char** argv) {
         writefile (argv[3], writebuf, inputSize);
         exit (0);
     }
-    die ("Unknown command, usage: d|e file <file>");
+    die ("Unknown command, usage: d|e infile outfile");
 }
