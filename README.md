@@ -17,7 +17,7 @@ zenlz4 supports:
 
 Example of seamless integration in Neovim (make sure you have zenlz4 on the path):
 
-´´´ lua
+```lua
 vim.api.nvim_create_autocmd("BufReadCmd", {
   pattern = { "*.jsonlz4" },
   callback = function()
@@ -71,8 +71,9 @@ vim.api.nvim_create_autocmd("BufWriteCmd", {
     if res.code ~= 0 then
       error("zenlz4 encode failed: " .. (res.stderr or ""))
     end
+
     vim.notify("zenlz4: compressed file updated", vim.log.levels.INFO)
     vim.bo.modified = false
   end,
 })
-´´´
+```
