@@ -10,7 +10,7 @@ It converts between:
 
 ## What it does
 
-jsonlz4 handles:
+zenlz4 handles:
 
 [ "mozLz40" header ][ original size (4 bytes) ][ LZ4 compressed JSON ]
 
