@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <io.h>
 #include <iostream>
-
+#include <optional>
 
 static void die (std::string msg) {
     std::print ("{}\n", msg);
@@ -27,33 +27,24 @@ static std::vector<unsigned char> readfile (const std::string& path) {
     if (!file.read (reinterpret_cast<char*> (mem.data ()), size)) die ("Failed to read file");
     return mem;
 }
-
-int writefile_with_header (const std::string& path, std::vector<char>& mem, int og_filesize) {
+int writefile (const std::string& path, std::vector<char>& mem,  const std::optional<int> og_filesize = std::nullopt) {
     std::ofstream file (path, std::ios::binary);
     if (!file) die ("Can't open file.\n");
-   char header[] = "mozLz40";
-    if (!file.write (header,8)) die ("Failed to write file");
-    if (!file.write (reinterpret_cast<char*>(&og_filesize),4)) die ("Failed to write file");
-    if (!file.write (reinterpret_cast<char*> (mem.data ()), mem.size ())) die ("Failed to write file");
+    if (og_filesize) {
+        char header[] = "mozLz40";
+        if (!file.write (header, 8)) die ("Failed to write header");
+        int size = og_filesize.value();
+        if (!file.write (reinterpret_cast<char*> (&size), 4)) die ("Failed to write size");
+    }
+    if (!file.write (reinterpret_cast<char*> (mem.data ()), mem.size ())) die ("Failed to write blob");
     return mem.size ();
 }
-int writefile (const std::string& path, std::vector<char>& mem) {
-    std::ofstream file (path, std::ios::binary);
-    if (!file) die ("Can't open file.\n");
-    int size = mem.size();
-    if (!file.write (reinterpret_cast<char*> (mem.data ()), mem.size ())) die ("Failed to write file");
-    return mem.size ();
-}
-
 
 int main (int argc, char** argv) {
+    _setmode (_fileno (stdout), _O_BINARY);
 
-    _setmode(_fileno(stdout), _O_BINARY);
-
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-
-    // now safe to write binary to std::cout
+    std::ios::sync_with_stdio (false);
+    std::cin.tie (nullptr);
 
     if (argc != 4) die ("usage: d|e infile outfile");
     if (argv[1][0] == 'd') {
@@ -62,9 +53,9 @@ int main (int argc, char** argv) {
         std::vector<char> writebuf (expected_size * 4);
         int result = LZ4_decompress_safe (reinterpret_cast<const char*> (&readbuf[12]), &writebuf[0],
                                           readbuf.size () - 12, writebuf.size ());
-        writebuf.resize(result);
-        
-        writefile(argv[3], writebuf);
+        writebuf.resize (result);
+
+        writefile (argv[3], writebuf);
         exit (0);
     }
     if (argv[1][0] == 'e') {
@@ -75,9 +66,9 @@ int main (int argc, char** argv) {
         int actual_size
             = LZ4_compress_default (reinterpret_cast<const char*> (&readbuf[0]), &writebuf[0], inputSize, maxout);
         if (actual_size <= 0) die ("compression failed\n");
-        writebuf.resize(actual_size);
-       
-        writefile_with_header(argv[3], writebuf, inputSize);
+        writebuf.resize (actual_size);
+
+        writefile (argv[3], writebuf, inputSize);
         exit (0);
     }
     die ("Unknown command, usage: d|e file <file>");
