@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/Users/Mbutu/Documents/projects/2026/jsonlz4/build",
-  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -external:IC:\\Users\\Mbutu\\Documents\\projects\\2025\\vcpkg\\installed\\x64-windows-static\\include -external:W0 /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++latest -MT @runSolution\\CMakeFiles\\zenlz4.dir\\main.cpp.obj.modmap /ForunSolution\\CMakeFiles\\zenlz4.dir\\main.cpp.obj /FdrunSolution\\CMakeFiles\\zenlz4.dir\\ /FS -c C:\\Users\\Mbutu\\Documents\\projects\\2026\\jsonlz4\\runSolution\\main.cpp",
-  "file": "C:/Users/Mbutu/Documents/projects/2026/jsonlz4/runSolution/main.cpp",
-  "output": "C:/Users/Mbutu/Documents/projects/2026/jsonlz4/build/runSolution/CMakeFiles/zenlz4.dir/main.cpp.obj"
-}
-]
