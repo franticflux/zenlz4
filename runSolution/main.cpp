@@ -12,7 +12,7 @@ static void die (std::string msg) {
 
 static std::vector<unsigned char> readfile (const std::string& path) {
     std::ifstream file (path, std::ios::binary);
-    if (!file) die ("Can't open file.\n");
+    if (!file) die ("Can't open file");
     file.seekg (0, std::ios::end);
     std::streamsize size = file.tellg ();
     file.seekg (0, std::ios::beg);
@@ -24,7 +24,7 @@ static std::vector<unsigned char> readfile (const std::string& path) {
 }
 int writefile (const std::string& path, std::vector<char>& mem,  const std::optional<int> og_filesize = std::nullopt) {
     std::ofstream file (path, std::ios::binary);
-    if (!file) die ("Can't open file.\n");
+    if (!file) die ("Can't open file");
     if (og_filesize) {
         char header[] = "mozLz40";
         if (!file.write (header, 8)) die ("Failed to write header");
@@ -39,7 +39,8 @@ int main (int argc, char** argv) {
 
     if (argc != 4) die ("Too few arguments, usage: d|e infile outfile");
     if (argv[1][0] == 'd') {
-        std::vector readbuf = readfile (argv[2]);
+        std::vector readbuf = readfile (argv[2]); 
+        if(*reinterpret_cast<unsigned long long*>(&readbuf[0])!=0x30347a4c7a6f6d) die ("File input error, jsonlz4 signature mismatch");
         int expected_size = *reinterpret_cast<int*> (&readbuf[8]);
         std::vector<char> writebuf (expected_size * 4);
         int result = LZ4_decompress_safe (reinterpret_cast<const char*> (&readbuf[12]), &writebuf[0],
